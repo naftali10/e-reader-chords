@@ -50,4 +50,4 @@ class ChordLine:
 
 
     def get_type(self):
-        return self._type
+        return str(self._type)

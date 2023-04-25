@@ -3,6 +3,8 @@ from io import BytesIO
 from pdfrw import PdfWriter, PdfReader
 from PIL import Image, ImageDraw, ImageFont
 
+from ChordLineList import *
+
 class MyCanvas(canvas.Canvas):
 
     _packet = None
@@ -88,6 +90,8 @@ class MyCanvas(canvas.Canvas):
 
 
     def write_text(self, text, title):
+
+        chord_line_list = ChordLineList(text)
         
         page_num = 1
         x = self.left_margin

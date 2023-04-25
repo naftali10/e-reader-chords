@@ -35,5 +35,5 @@ class ChordsSite:
         self._web_aux = ChordsSite.WebAux(url)
 
 
-    def parse_chords():
-        _parsed_chords = ChordLineList(self._chords)
+    def parse_chords(self):
+        self._parsed_chords = ChordLineList(self._chords)

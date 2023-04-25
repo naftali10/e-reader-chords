@@ -9,8 +9,7 @@ class ChordLineList:
         self.parse_empty()
         self.parse_headings()
         self.parse_lyrics()
-        #self.parse_chords()
-        #self.wrap_lines()
+        self.parse_chords()
 
 
     def init_list(self, chords):
@@ -43,11 +42,16 @@ class ChordLineList:
 
 
     def parse_chords(self):
-        chord_pattern = r""
-        for chord_line in self._chord_line_list:
-            if re.match(chord_pattern, chord_line.get_text()):
-                chord_line.set_type_lyrics()
-                
+        chord_pattern = r"^[a-zA-Z245679+#/ ]+$"
+        for i in range(len(self._chord_line_list)-1):
+            if re.match(chord_pattern, self._chord_line_list[i].get_text()):
+                if self._chord_line_list[i+1].is_lyrics():
+                    self._chord_line_list[i].set_type_chords()
+
+
+    def wrap_line (self, line_number):
+        return
+    
 
 def test():
     text = ("\nIt doesn't matter if you love him, or capital H-I-M \n"+
@@ -75,6 +79,6 @@ def test():
     print(chord_line_list._chord_line_list[0].get_text())
     print(chord_line_list._chord_line_list[2].is_heading())
     for chord_line in chord_line_list._chord_line_list:
-        print(chord_line.get_text()+"   -   "+str(chord_line.get_type()))
+        print(chord_line.get_text()+"   -   "+chord_line.get_type())
 
-test()
+#test()

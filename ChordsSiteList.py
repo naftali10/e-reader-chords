@@ -1,4 +1,5 @@
 from UGChordsSite import UGChordsSite
+from MyCanvas import MyCanvas
 
 class ChordsSiteList:
     _urls_file_path = None
@@ -30,10 +31,7 @@ class ChordsSiteList:
 
 
     def save_to_pdf(self, pdf_path):
-
-        from MyCanvas import MyCanvas
-
-        # Create a new PDF with Reportlab        
+        
         can = MyCanvas()
 
         for chords_site in self._chords_site_list:
