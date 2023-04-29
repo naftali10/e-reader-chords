@@ -9,6 +9,7 @@ class SongLine:
     def __init__(self, text):
         self._text = text
         self._type = None
+        self._width = len(text)
         
 
     def get_text(self):
@@ -54,22 +55,18 @@ class SongLine:
         return str(self._type)
 
 
-    def set_width(self, width):
-        self._width = width
+    def is_too_long(self, width):
+        return width < self._width
 
 
-    def get_width(self):
-        return self._width
-
-
-    def get_wrapped_text(self, page_width):
+    def get_wrapped_text(self, page_width_in_chars):
 
         words = self._text.split()  # Split the text into words
         lines = []  # Initialize the lines list
         current_line = ""  # Initialize the current line string
 
         for word in words:
-            if len(current_line + word) + 1 <= page_width:
+            if len(current_line + word) + 1 <= page_width_in_chars:
                 current_line += word + " "  # Add the word to the current line
             else:
                 lines.append(current_line.strip())  # Add the current line to the lines list

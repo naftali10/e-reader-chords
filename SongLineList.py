@@ -49,13 +49,34 @@ class SongLineList:
                     self._song_line_list[i].set_type_chords()
 
 
-    def wrap_lines (self, page_width):
-        for i in range(len(self._song_line_list)):
-            if self._song_line_list[i].is_lyrics():
-                if page_width < len(self._song_line_list[i].get_text()):
-                    # wrap lines logic
-                    return
+    def wrap_lines (self, page_width_in_chars):
 
+        for i, song_line in enumerate(self._song_line_list):
+            if song_line.is_lyrics():
+                if song_line.is_too_long(page_width_in_chars):
+                    del self._song_line_list[i]
+                    wrapped_text = song_line.get_wrapped_text(page_width_in_chars).split('\n')
+                    insert_index = i
+                    for wrapped_line in wrapped_text:
+                        new_song_line = SongLine(wrapped_line)
+                        new_song_line.set_type_lyrics()
+                        self._song_line_list.insert(insert_index, new_song_line)
+                        insert_index += 1
+
+        for i, song_line in enumerate((self._song_line_list)):
+            if song_line.is_chords():
+                if song_line.is_too_long(page_width_in_chars):
+                    del self._song_line_list[i]
+                    wrapped_text = song_line.get_wrapped_text(page_width_in_chars).split('\n')
+                    insert_index = i
+                    for wrapped_line in wrapped_text:
+                        new_song_line = SongLine(wrapped_line)
+                        new_song_line.set_type_chords()
+                        self._song_line_list.insert(insert_index, new_song_line)
+                        if self._song_line_list[insert_index+1].is_lyrics():
+                            insert_index += 2
+                        else:
+                            insert_index += 1
 
 
 
