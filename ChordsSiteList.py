@@ -36,7 +36,7 @@ class ChordsSiteList:
 
         for chords_site in self._chords_site_list:
             title = chords_site._artist + ' - ' + chords_site._title
-            text = chords_site._chords
+            text = chords_site._song
             can.add_header_page(title)
             can.write_text(text, title)
                     

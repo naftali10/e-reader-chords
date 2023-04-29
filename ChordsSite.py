@@ -1,12 +1,12 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from ChordLineList import ChordLineList
+from SongLineList import SongLineList
 
 class ChordsSite:
     _url = None
     _artist = None
     _title = None
-    _chords = None
+    _song = None
     _web_aux = None
     _language = None
     _parsed_chords = None
@@ -35,5 +35,5 @@ class ChordsSite:
         self._web_aux = ChordsSite.WebAux(url)
 
 
-    def parse_chords(self):
-        self._parsed_chords = ChordLineList(self._chords)
+    def parse_song(self):
+        self._parsed_chords = SongLineList(self._song)

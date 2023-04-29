@@ -9,31 +9,31 @@ class UGChordsSite(ChordsSite.ChordsSite):
         _language = "EN"        
         self._artist = self.get_artist_from_browser()
         self._title = self.get_title_from_browser()
-        self._chords = self.get_chords_from_browser()
+        self._song = self.get_song_from_browser()
 
         self._web_aux.browser.quit()
-        self.parse_chords()
+        self.parse_song()
 
     
-    def get_chords_from_browser(self):
+    def get_song_from_browser(self):
 
         section = self._web_aux.soup.find("pre")
 
-        # Extract all the chords from section
-        chords = section.get_text()
+        # Extract all the song from section
+        song = section.get_text()
         
-        # Rerturn the chords
-        return chords
+        # Rerturn the song
+        return song
 
 
     def get_artist_from_browser(self):
 
         section = self._web_aux.soup.find('a', class_=['aPPf7 fcGj5'])
 
-        # Extract all the chords from section
+        # Extract all the song from section
         artist = section.get_text()
         
-        # Rerturn the chords
+        # Rerturn the song
         return artist
 
     
@@ -41,10 +41,10 @@ class UGChordsSite(ChordsSite.ChordsSite):
 
         section = self._web_aux.soup.find('h1', class_=['dUjZr'])
 
-        # Extract all the chords from section
+        # Extract the titile from section
         title = section.get_text()
         
-        # Rerturn the chords
+        # Rerturn the title
         return title[:-7]
 
         
@@ -53,7 +53,7 @@ def test():
     url = "https://tabs.ultimate-guitar.com/tab/lady-gaga/born-this-way-chords-1028955"
     url = "https://tabs.ultimate-guitar.com/tab/britney-spears/everytime-chords-117988"
     ug_chord_site = UGChordsSite(url)
-    print (ug_chord_site._chords)
+    print (ug_chord_site._song)
     print (ug_chord_site._artist)
     print (ug_chord_site._title)
 

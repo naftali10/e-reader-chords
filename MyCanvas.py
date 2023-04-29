@@ -3,7 +3,7 @@ from io import BytesIO
 from pdfrw import PdfWriter, PdfReader
 from PIL import Image, ImageDraw, ImageFont
 
-from ChordLineList import *
+from SongLineList import *
 
 class MyCanvas(canvas.Canvas):
 
@@ -91,7 +91,7 @@ class MyCanvas(canvas.Canvas):
 
     def write_text(self, text, title):
 
-        chord_line_list = ChordLineList(text)
+        song_line_list = SongLineList(text)
         
         page_num = 1
         x = self.left_margin

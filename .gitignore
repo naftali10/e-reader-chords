@@ -1,5 +1,7 @@
 
 __pycache__/
 titles/
+venv/
+.idea/
 output.pdf
 urls.txt
