@@ -1,22 +1,30 @@
 import re
 from SongLine import SongLine
 
+
 class SongLineList:
+
     _song_line_list = None
-    
-    def __init__(self, chords):
-        self.init_list(chords)
+
+    def __init__(self, lines, page_width_in_chars):
+        self.init_list(lines)
         self.parse_empty()
         self.parse_headings()
         self.parse_lyrics()
         self.parse_chords()
+        self.wrap_lines(page_width_in_chars)
 
+    def get_len(self):
+        return len(self._song_line_list)
+
+    def get_list(self):
+        return self._song_line_list
 
     def init_list(self, chords):
         self._song_line_list = []
         lines = chords.split('\n')
         for line in lines:
-            self._song_line_list.append(SongLine(line))
+            self._song_line_list.append(SongLine(line[:-1]))
 
 
     def parse_empty(self):
@@ -108,4 +116,4 @@ def test():
     for song_line in song_line_list._song_line_list:
         print(song_line.get_text()+"   -   "+song_line.get_type())
 
-#test()
+# test()
