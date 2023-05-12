@@ -13,10 +13,10 @@ class PDFChordWriter(canvas.Canvas):
     _UG_chords_list = None
     _TAB4U_chords_list = None
 
-    def __init__(self, urls_file_path, cfg):
-        self._cfg = cfg
+    def __init__(self, urls_file_path):
         self._packet = BytesIO()
         super().__init__(self._packet, pagesize=(self._cfg.page_width_cm, self._cfg.page_height_px))
+        self._cfg.char_to_px = self.stringWidth('A', self._cfg.font, self._cfg.font_size)
         self._UG_chords_list = ChordsSiteList(urls_file_path, self.get_max_line_len())
 
     def add_header_page(self, title):
@@ -40,10 +40,7 @@ class PDFChordWriter(canvas.Canvas):
         pdf_writer.write(pdf_path)
 
     def get_max_line_len(self):
-        length = 1
-        while self.stringWidth('*'*length, self._cfg.font, self._cfg.font_size) < self._cfg.page_width_px:
-            length += 1
-        return length
+        return int(self._cfg.page_width_px / self._cfg.char_to_px)
 
 
 def test():
