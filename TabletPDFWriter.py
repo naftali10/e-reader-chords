@@ -41,7 +41,7 @@ class TabletPDFWriter (PDFChordWriter):
     def start_new_page(self, num_of_rows, title):
 
         def print_title_as_text():
-            x_for_center = max(0,(self._cfg.page_width_px - len(title)*self._cfg.char_to_px) / 2)
+            x_for_center = max(0, (self._cfg.page_width_px - len(title)*self._cfg.char_to_px) / 2)
             y = self._cfg.page_height_px - self._leading * 1.1
             self.drawString(x_for_center, y, title)
 

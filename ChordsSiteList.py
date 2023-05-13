@@ -23,6 +23,7 @@ class ChordsSiteList:
         self._chords_site_list = []
         for url in urls:
             self._chords_site_list.append(UGChordsSite(url, max_line_len))
+            print("Successfully appended", self._chords_site_list[-1].get_title())
 
     def sort(self):
         self._chords_site_list.sort(key=lambda site: (site.get_title()))

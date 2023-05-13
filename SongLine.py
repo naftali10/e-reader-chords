@@ -48,30 +48,54 @@ class SongLine:
 
 
     def is_type_set(self):
-        return self._type != None
-
+        return self._type is not None
 
     def get_type(self):
         return str(self._type)
 
-
     def is_too_long(self, width):
         return width < self._width
 
-
     def get_wrapped_text(self, page_width_in_chars):
 
-        words = self._text.split()  # Split the text into words
+        def split_to_words_incl_pre_whitespaces(text):
+
+            split_list = []
+            current_string = ''
+            inside_a_word = False
+
+            for char in text:
+                if inside_a_word:
+                    if char.isspace():
+                        split_list.append(current_string)
+                        current_string = char
+                        inside_a_word = False
+                    else:
+                        current_string += char
+                else:
+                    current_string += char
+                    if not char.isspace():
+                        inside_a_word = True
+            if inside_a_word:
+                split_list.append(current_string)
+            return split_list
+
+        words = split_to_words_incl_pre_whitespaces(self._text)
         lines = []  # Initialize the lines list
         current_line = ""  # Initialize the current line string
 
         for word in words:
-            if len(current_line + word) + 1 <= page_width_in_chars:
-                current_line += word + " "  # Add the word to the current line
+            if len(current_line + word) <= page_width_in_chars:
+                current_line += word
             else:
-                lines.append(current_line.strip())  # Add the current line to the lines list
-                current_line = word + " "  # Start a new line with the current word
+                if len(word) < page_width_in_chars:
+                    lines.append(current_line)
+                    current_line = word
+                else:
+                    for i in range(0, len(word), page_width_in_chars):
+                        lines.append(word[i:i + page_width_in_chars])
 
-        lines.append(current_line.strip())  # Add the final line to the lines list
+
+        lines.append(current_line)  # Add the final line to the lines list
 
         return "\n".join(lines)  # Join the lines with newline characters and return the result
