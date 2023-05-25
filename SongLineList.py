@@ -41,14 +41,14 @@ class SongLineList:
                 song_line.set_type_heading()
 
     def parse_lyrics(self):
-        word_pattern = r"([a-zA-Z',\.\"\(\)\-]{2,}|I)"
+        word_pattern = r"([a-zA-Z\'\,\.\"\(\)\-\:]{2,}|I)"
         lyrics_pattern = r"\W*"+word_pattern+r"\W+"+word_pattern+r"\W+"+word_pattern+r"\W*"
         for song_line in self._song_line_list:
             if re.match(lyrics_pattern, song_line.get_text()):
                 song_line.set_type_lyrics()
 
     def parse_chords(self):
-        chord_pattern = r"^[a-zA-Z245679+#/ ]+$"
+        chord_pattern = r"^[abdgijmsuA-G245679+#/ ]+$"
         for i in range(len(self._song_line_list) - 1):
             if re.match(chord_pattern, self._song_line_list[i].get_text()):
                 if self._song_line_list[i + 1].is_lyrics():
@@ -135,7 +135,10 @@ def test():
             "A                    A5 \n" +
             "listen to me when I say \n \n \n[Pre-Chorus]"
             )
-    song_line_list = SongLineList(text, 33)
+    text = ("                    Am         G           F       G      Esus4                 E     F \n" +
+            "All the leaves are brown                  and the sky is gray \n" +
+            "( All the leaves are brown )             (and the skies are grey ey )")
+    song_line_list = SongLineList(text, 50)
     for song_line in song_line_list._song_line_list:
         print(song_line.get_text()+"| "+song_line.get_type())
 

@@ -3,5 +3,6 @@ __pycache__/
 titles/
 venv/
 .idea/
+URLs/
 output.pdf
 urls.txt
