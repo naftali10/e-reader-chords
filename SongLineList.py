@@ -5,14 +5,16 @@ from SongLine import SongLine
 class SongLineList:
 
     _song_line_list = None
+    _page_width_in_chars = None
 
     def __init__(self, lines, page_width_in_chars):
-        self.init_list(lines)
+        self._page_width_in_chars = page_width_in_chars
+        self.init_list(lines, page_width_in_chars)
         self.parse_empty()
         self.parse_headings()
         self.parse_lyrics()
         self.parse_chords()
-        self.wrap_lines(page_width_in_chars)
+        self.wrap_lines()
 
     def get_len(self):
         return len(self._song_line_list)
@@ -20,11 +22,11 @@ class SongLineList:
     def get_list(self):
         return self._song_line_list
 
-    def init_list(self, chords):
+    def init_list(self, lines, page_width_in_chars):
         self._song_line_list = []
-        lines = chords.split('\n')
+        lines = lines.split('\n')
         for line in lines:
-            self._song_line_list.append(SongLine(line[:-1]))
+            self._song_line_list.append(SongLine(line[:-1], page_width_in_chars))
 
     def parse_empty(self):
         empty_pattern = r"^\s*$"
@@ -52,62 +54,90 @@ class SongLineList:
                 if self._song_line_list[i + 1].is_lyrics():
                     self._song_line_list[i].set_type_chords()
 
-    def wrap_lines(self, page_width_in_chars):
+    def wrap_lines(self):
 
-        for i, song_line in enumerate(self._song_line_list):
-            if song_line.is_lyrics():
-                if song_line.is_too_long(page_width_in_chars):
-                    del self._song_line_list[i]
-                    wrapped_text = song_line.get_wrapped_text(page_width_in_chars).split('\n')
-                    insert_index = i
-                    for wrapped_line in wrapped_text:
-                        new_song_line = SongLine(wrapped_line)
-                        new_song_line.set_type_lyrics()
-                        self._song_line_list.insert(insert_index, new_song_line)
-                        insert_index += 1
+        # Cases:
+        # Long line, no type - no wrapping
+        # Long lyrics with short chords or no chords - wrap only lyrics
+        # Long lyrics with long chords - wrap them together
+        # Long chords with no lyrics - wrap only chords
+        # Long chords with short lyrics - wrap them together
 
-        for i, song_line in enumerate(self._song_line_list):
-            if song_line.is_chords():
-                if song_line.is_too_long(page_width_in_chars):
-                    del self._song_line_list[i]
-                    wrapped_text = song_line.get_wrapped_text(page_width_in_chars).split('\n')
-                    insert_index = i
-                    for wrapped_line in wrapped_text:
-                        new_song_line = SongLine(wrapped_line)
-                        new_song_line.set_type_chords()
-                        self._song_line_list.insert(insert_index, new_song_line)
-                        if self._song_line_list[insert_index+1].is_lyrics():
-                            insert_index += 2
+        new_line_list = []
+        skip_line = False
+
+        for line_idx, song_line in enumerate(self._song_line_list):
+
+            if skip_line:
+                skip_line = False
+                continue
+
+            if 0 < line_idx:
+                prev_line = self._song_line_list[line_idx-1]
+            else:
+                prev_line = None
+            if line_idx+1 < len(self._song_line_list):
+                next_line = self._song_line_list[line_idx+1]
+            else:
+                next_line = None
+
+            line_replacement = [song_line]
+
+            if song_line.is_chords() and song_line.is_too_long():
+                if next_line is not None:
+                    if next_line.is_lyrics():
+                        if next_line.is_too_long():
+                            continue
                         else:
-                            insert_index += 1
+                            line_replacement = song_line.wrap_within_reference([next_line])
+                            skip_line = True
+                    else:
+                        line_replacement = song_line.split_to_wrapped_lines()
+                else:
+                    line_replacement = song_line.split_to_wrapped_lines()
+
+            if song_line.is_lyrics() and song_line.is_too_long():
+                if prev_line is not None:
+                    if prev_line.is_chords():
+                        if prev_line.is_too_long():
+                            line_replacement = prev_line.wrap_within_reference(song_line.split_to_wrapped_lines())
+                        else:
+                            line_replacement = song_line.split_to_wrapped_lines()
+                    else:
+                        line_replacement = song_line.split_to_wrapped_lines()
+                else:
+                    line_replacement = song_line.split_to_wrapped_lines()
+
+            new_line_list += line_replacement
+
+        self._song_line_list = new_line_list
 
 
 def test():
     text = ("\nIt doesn't matter if you love him, or capital H-I-M \n" +
             "Bm\nJust put your paws up \n" +
-            "Bm\n'Cause you were Born This Way, baby\n \n" +
-            "E5    D5     A5    E5\n \n \n[Verse]\n \n" +
-            "E                     D\n" +
+            "Bm\n'Cause you were Born This Way, baby \n \n" +
+            "E5    D5     A5    E5 \n \n \n[Verse] \n \n" +
+            "E                     D \n" +
             "My mama told me when I was young \n" +
-            "A          Asus           Amaj7     Bm\n" +
-            "We are all born superstars \n+" +
-            "E                              D\n" +
+            "A          Asus           Amaj7     Bm \n" +
+            "We are all born superstars \n" +
+            "E                              D \n" +
             "She rolled my hair and put my lipstick on \n" +
-            "A               Asus2           Amaj7     Bm7\n" +
+            "A               Asus2           Amaj7     Bm7 \n" +
             "In the glass of her boudoir \n \n" +
-            "E                                   D\n" +
+            "E                                   D \n" +
             "There's nothin' wrong with lovin' who you are \n" +
-            "A                              A5\n" +
+            "A                              A5 \n" +
             "She said, Cause he made you perfect, babe \n" +
-            "E                                       D\n" +
+            "E                                       D \n" +
             "So hold your head up, girl and you you'll go far,\n" +
-            "A                    A5\n" +
+            "A                    A5 \n" +
             "listen to me when I say \n \n \n[Pre-Chorus]"
             )
-    song_line_list = SongLineList(text)
-    print(song_line_list._song_line_list[0].get_text())
-    print(song_line_list._song_line_list[2].is_heading())
+    song_line_list = SongLineList(text, 33)
     for song_line in song_line_list._song_line_list:
-        print(song_line.get_text()+"   -   "+song_line.get_type())
+        print(song_line.get_text()+"| "+song_line.get_type())
+
 
 # test()

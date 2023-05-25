@@ -1,16 +1,15 @@
 class SongLine:
 
-    
     _text = None
     _type = None
-    _width = None
+    _len = None
+    _page_width_in_chars = None
 
-
-    def __init__(self, text):
+    def __init__(self, text, page_width_in_chars, _type=None):
         self._text = text
-        self._type = None
-        self._width = len(text)
-        
+        self._type = _type
+        self._len = len(text)
+        self._page_width_in_chars = page_width_in_chars
 
     def get_text(self):
         return self._text
@@ -18,34 +17,26 @@ class SongLine:
     def set_type_empty(self):
         self._type = 'MT'
 
-
     def set_type_lyrics(self):
         self._type = 'LY'
-
 
     def set_type_chords(self):
         self._type = 'CH'
 
-
     def set_type_heading(self):
         self._type = 'HD'
-
 
     def is_empty(self):
         return self._type == 'MT'
 
-
     def is_lyrics(self):
         return self._type == 'LY'
-
 
     def is_chords(self):
         return self._type == 'CH'
 
-
     def is_heading(self):
         return self._type == 'HD'
-
 
     def is_type_set(self):
         return self._type is not None
@@ -53,10 +44,16 @@ class SongLine:
     def get_type(self):
         return str(self._type)
 
-    def is_too_long(self, width):
-        return width < self._width
+    def get_len(self):
+        return self._len
 
-    def get_wrapped_text(self, page_width_in_chars):
+    def get_last_idx(self):
+        return self._len - 1
+
+    def is_too_long(self):
+        return self._page_width_in_chars < self._len
+
+    def split_to_wrapped_lines(self):
 
         def split_to_words_incl_pre_whitespaces(text):
 
@@ -81,21 +78,55 @@ class SongLine:
             return split_list
 
         words = split_to_words_incl_pre_whitespaces(self._text)
-        lines = []  # Initialize the lines list
-        current_line = ""  # Initialize the current line string
-
+        wrapped_lines = []  # Initialize the lines list
+        current_line_text = ""  # Initialize the current line string
         for word in words:
-            if len(current_line + word) <= page_width_in_chars:
-                current_line += word
+            if len(current_line_text + word) <= self._page_width_in_chars:
+                current_line_text += word
             else:
-                if len(word) < page_width_in_chars:
-                    lines.append(current_line)
-                    current_line = word
+                if len(word) < self._page_width_in_chars:
+                    wrapped_lines.append(
+                        SongLine(current_line_text,
+                                 self._page_width_in_chars,
+                                 self._type))
+                    current_line_text = word
                 else:
-                    for i in range(0, len(word), page_width_in_chars):
-                        lines.append(word[i:i + page_width_in_chars])
+                    for i in range(0, len(word), self._page_width_in_chars):
+                        wrapped_lines.append(
+                            SongLine(word[i:i+self._page_width_in_chars],
+                                     self._page_width_in_chars,
+                                     self._type))
+        # Add the final line to the lines list
+        wrapped_lines.append(SongLine(current_line_text, self._page_width_in_chars, self._type))
+        return wrapped_lines
 
+    def wrap_within_reference(self, reference_lines):
 
-        lines.append(current_line)  # Add the final line to the lines list
+        def get_end_char_index():
+            index = start_char_index + reference_line.get_last_idx()
+            if self.get_last_idx() < index:
+                index = self.get_last_idx()
+            if index + 1 < self.get_last_idx():
+                # If it's the middle of a word
+                if not self._text[index].isspace() and not self._text[index + 1].isspace():
+                    # Go back to word start
+                    while not self._text[index].isspace() and start_char_index < index:
+                        index -= 1
+            return index
 
-        return "\n".join(lines)  # Join the lines with newline characters and return the result
+        result = reference_lines.copy()
+        start_char_index = 0
+        for ref_line_index, reference_line in enumerate(reference_lines):
+            end_char_index = get_end_char_index()
+            wrapped_line = SongLine(self._text[start_char_index:end_char_index + 1],
+                                    self._page_width_in_chars,
+                                    self._type)
+            result.insert(ref_line_index*2, wrapped_line)
+            start_char_index = end_char_index + 1
+            if self.get_last_idx() < start_char_index:
+                break
+        # Add what's left, if any
+        if start_char_index < self.get_last_idx():
+            wrapped_line = SongLine(self._text[start_char_index:], self._page_width_in_chars, self._type)
+            result.append(wrapped_line)
+        return result
