@@ -1,12 +1,15 @@
 from UGChordsSite import UGChordsSite
+from TAB4UChordsSite import TAB4UChordsSite
 
 
 class ChordsSiteList:
 
+    _site_name = None
     _urls_file_path = None
     _chords_site_list = None
 
-    def __init__(self, urls_file_path, max_line_len):
+    def __init__(self, urls_file_path, max_line_len, site_name):
+        self._site_name = site_name
         self._urls_file_path = urls_file_path
         self.parse_urls(max_line_len)
         self.sort()
@@ -22,7 +25,10 @@ class ChordsSiteList:
         # Iterate over the list of URLs
         self._chords_site_list = []
         for url in urls:
-            self._chords_site_list.append(UGChordsSite(url, max_line_len))
+            if self._site_name == 'UG':
+                self._chords_site_list.append(UGChordsSite(url, max_line_len))
+            if self._site_name == 'TAB4U':
+                self._chords_site_list.append(TAB4UChordsSite(url, max_line_len))
             print("Successfully appended", self._chords_site_list[-1].get_title())
 
     def sort(self):
@@ -32,7 +38,7 @@ class ChordsSiteList:
         return self._chords_site_list
 
 def test():
-    urls_file_path = 'urls.txt'
+    urls_file_path = 'URLs/UG-URLs.txt'
     chords_site_list = ChordsSiteList(urls_file_path)
     print (chords_site_list._chords_site_list[0]._song_name)
     chords_site_list.sort()

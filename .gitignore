@@ -5,4 +5,5 @@ venv/
 .idea/
 URLs/
 output.pdf
-urls.txt
+URLs/UG-URLs.txt
+URLs/TAB4U-URLs.txt

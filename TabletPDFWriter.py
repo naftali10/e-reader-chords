@@ -6,9 +6,9 @@ class TabletPDFWriter (PDFChordWriter):
 
     _cfg = None
 
-    def __init__(self, urls_file_path):
+    def __init__(self, urls_file_path, site_name):
         self.configure_page()
-        super().__init__(urls_file_path)
+        super().__init__(urls_file_path, site_name)
 
     def configure_page(self):
 
@@ -20,7 +20,7 @@ class TabletPDFWriter (PDFChordWriter):
 
     def make_pdf(self, output_file_path):
 
-        for song in self._UG_chords_list.get_list():
+        for song in self._chord_site_list.get_list():
             title = song.get_title()
             parsed_line_list = song.get_parsed_lines()
             self.write_text(parsed_line_list, title)
@@ -53,8 +53,8 @@ class TabletPDFWriter (PDFChordWriter):
 
 
 def test():
-    urls_file_path = 'urls.txt'
-    tablet_chord_writer = TabletPDFWriter(urls_file_path)
+    UG_urls_file_path = 'URLs/TAB4U-URLs.txt'
+    tablet_chord_writer = TabletPDFWriter(UG_urls_file_path, 'TAB4U')
     pdf_file_path = 'output.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
 

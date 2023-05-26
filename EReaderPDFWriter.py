@@ -16,7 +16,7 @@ class EReaderPDFWriter (PDFChordWriter):
 
     def make_pdf(self, output_file_path):
 
-        for song in self._UG_chords_list.get_list():
+        for song in self._chord_site_list.get_list():
             title = song.get_title()
             text = song.get_parsed_lines()
             self.write_text(text, title)
@@ -83,7 +83,7 @@ class EReaderPDFWriter (PDFChordWriter):
 def test():
     from PDFConfig import PDFConfig
     cfg = PDFConfig()
-    urls_file_path = 'urls.txt'
+    urls_file_path = 'URLs/UG-URLs.txt'
     tablet_chord_writer = EReaderPDFWriter(urls_file_path, cfg)
     pdf_file_path = 'output.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
