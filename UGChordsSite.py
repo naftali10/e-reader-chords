@@ -1,4 +1,5 @@
 import ChordsSite
+from selenium.webdriver.common.by import By
 
 
 class UGChordsSite(ChordsSite.ChordsSite):
@@ -7,9 +8,10 @@ class UGChordsSite(ChordsSite.ChordsSite):
         
         super().__init__(url)
 
-        _language = "EN"        
+        _language = "EN"
         self.set_artist()
         self.set_song_name()
+        self.transpose_chords()
         self.set_song_text()
 
         self._web_aux.browser.quit()
@@ -38,11 +40,26 @@ class UGChordsSite(ChordsSite.ChordsSite):
         # Extract the title from section
         self._song_name = section.get_text()[:-7]
 
+    def transpose_chords(self):
+        down_button = self._web_aux.browser.find_elements(
+            By.CLASS_NAME,
+            value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[2]
+        up_button = self._web_aux.browser.find_elements(
+            By.CLASS_NAME,
+            value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[3]
+        if self._chord_transpose < 0:
+            for i in range(abs(self._chord_transpose)):
+                down_button.click()
+        if 0 < self._chord_transpose:
+            for i in range(abs(self._chord_transpose)):
+                up_button.click()
+        self._web_aux.reload()
+
 
 def test():
     url = "https://tabs.ultimate-guitar.com/tab/lady-gaga/born-this-way-chords-1028955"
-    url = "https://tabs.ultimate-guitar.com/tab/britney-spears/everytime-chords-117988"
-    ug_chord_site = UGChordsSite(url)
+    url = "https://tabs.ultimate-guitar.com/tab/britney-spears/everytime-chords-117988|+1"
+    ug_chord_site = UGChordsSite(url, 50)
     print(ug_chord_site._song_text)
     print(ug_chord_site._artist)
     print(ug_chord_site._song_name)
