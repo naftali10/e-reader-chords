@@ -37,6 +37,12 @@ class ChordsSiteList:
     def get_list(self):
         return self._chords_site_list
 
+    def get_language(self):
+        if self._site_name == 'UG':
+            return 'EN'
+        if self._site_name == 'TAB4U':
+            return 'HE'
+
 def test():
     urls_file_path = 'URLs/UG-URLs.txt'
     chords_site_list = ChordsSiteList(urls_file_path)

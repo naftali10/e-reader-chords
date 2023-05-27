@@ -1,5 +1,6 @@
 from PDFChordWriter import PDFChordWriter
 from PDFConfig import PDFConfig
+import re
 
 
 class TabletPDFWriter (PDFChordWriter):
@@ -35,7 +36,13 @@ class TabletPDFWriter (PDFChordWriter):
         y = self._cfg.page_height_px - self._cfg.top_margin_px - self._leading * 2
 
         for parsed_line in parsed_line_list.get_list():
-            self.drawString(x, y, parsed_line.get_text())
+            if self._chord_site_list.get_language() == 'EN':
+                self.drawString(x, y, parsed_line.get_text())
+            if self._chord_site_list.get_language() == 'HE':
+                if parsed_line.get_language() == 'EN':
+                    self.drawRightString(self._cfg.page_width_px-x, y, parsed_line.get_text())
+                if parsed_line.get_language() == 'HE':
+                    self.drawRightString(self._cfg.page_width_px-x, y, parsed_line.get_text()[::-1])
             y -= self._leading
 
     def start_new_page(self, num_of_rows, title):
@@ -43,7 +50,10 @@ class TabletPDFWriter (PDFChordWriter):
         def print_title_as_text():
             x_for_center = max(0, (self._cfg.page_width_px - len(title)*self._cfg.char_to_px) / 2)
             y = self._cfg.page_height_px - self._leading * 1.1
-            self.drawString(x_for_center, y, title)
+            if re.search(r'[א-ת]', title):
+                self.drawString(x_for_center, y, title[::-1])
+            else:
+                self.drawString(x_for_center, y, title)
 
         self.showPage()
         self._cfg.page_height_px = (num_of_rows + 2) * self._cfg.font_size * 1.2 + self._cfg.top_margin_px

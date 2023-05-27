@@ -1,14 +1,18 @@
+import re
+
 class SongLine:
 
     _text = None
     _type = None
     _len = None
     _page_width_in_chars = None
+    _language = None
 
     def __init__(self, text, page_width_in_chars, _type=None):
         self._text = text
         self._type = _type
         self._len = len(text)
+        self.determine_language()
         self._page_width_in_chars = page_width_in_chars
 
     def get_text(self):
@@ -130,3 +134,13 @@ class SongLine:
             wrapped_line = SongLine(self._text[start_char_index:], self._page_width_in_chars, self._type)
             result.append(wrapped_line)
         return result
+
+    def determine_language(self):
+        hebrew_pattern = r"[א-ת]"
+        if re.search(hebrew_pattern, self._text):
+            self._language = 'HE'
+        else:
+            self._language = 'EN'
+
+    def get_language(self):
+        return self._language
