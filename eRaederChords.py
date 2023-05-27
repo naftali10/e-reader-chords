@@ -1,7 +1,7 @@
 from ChordsSiteList import ChordsSiteList
 
 def main():
-    urls_file_path = 'urls.txt'
+    urls_file_path = 'URLs/UG-URLs.txt'
     destination_pdf_path = 'Chords.pdf'
     chords_site_list = ChordsSiteList(urls_file_path)
     chords_site_list.sort()

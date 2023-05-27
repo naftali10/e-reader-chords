@@ -26,7 +26,7 @@ class SongLineList:
         self._song_line_list = []
         lines = lines.split('\n')
         for line in lines:
-            self._song_line_list.append(SongLine(line[:-1], page_width_in_chars))
+            self._song_line_list.append(SongLine(line, page_width_in_chars))
 
     def parse_empty(self):
         empty_pattern = r"^\s*$"
@@ -41,7 +41,7 @@ class SongLineList:
                 song_line.set_type_heading()
 
     def parse_lyrics(self):
-        word_pattern = r"([a-zA-Z\'\,\.\"\(\)\-\:]{2,}|I)"
+        word_pattern = r"([a-zA-Zא-ת\'\,\.\"\(\)\-\:]{2,}|I)"
         lyrics_pattern = r"\W*"+word_pattern+r"\W+"+word_pattern+r"\W+"+word_pattern+r"\W*"
         for song_line in self._song_line_list:
             if re.match(lyrics_pattern, song_line.get_text()):

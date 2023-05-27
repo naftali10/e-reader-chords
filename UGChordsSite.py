@@ -18,9 +18,11 @@ class UGChordsSite(ChordsSite.ChordsSite):
     def set_song_text(self):
 
         section = self._web_aux.soup.find("pre")
-
-        # Extract all the song from section
-        self._song_text = section.get_text()
+        raw_text = section.get_text()
+        raw_lines = raw_text.split('\n')
+        self._song_text = ''
+        for line in raw_lines:
+            self._song_text += line[:-1]+'\n'
 
     def set_artist(self):
 

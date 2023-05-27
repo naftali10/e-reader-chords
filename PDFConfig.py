@@ -1,3 +1,5 @@
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 class PDFConfig:
 
@@ -13,8 +15,9 @@ class PDFConfig:
         self.page_height_cm = page_height_cm
 
         # Use only monospace fonts
-        self.font = "Courier-Bold"
-        self.Header_font = "Courier"
+        pdfmetrics.registerFont(TTFont('Courier-New-Bold', 'courbd.ttf'))
+        self.font = "Courier-New-Bold"
+        self.Header_font = "Courier-New-Bold"
         self.font_size = 10
 
         # Conversion of page size from centimeters to points
