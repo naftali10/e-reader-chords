@@ -1,6 +1,7 @@
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+
 class PDFConfig:
 
     def __init__(self, page_width_cm, page_height_cm):
