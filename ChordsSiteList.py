@@ -26,12 +26,13 @@ class ChordsSiteList:
 
         # Iterate over the list of URLs
         self._chords_site_list = []
-        for url in urls:
+        for idx, url in enumerate(urls):
             if self._site_name == 'UG':
                 self._chords_site_list.append(UGChordsSite(url, max_line_len))
             if self._site_name == 'TAB4U':
                 self._chords_site_list.append(TAB4UChordsSite(url, max_line_len))
-            print("Successfully appended", self._chords_site_list[-1].get_title())
+            count = '('+str(idx+1)+'/'+str(len(urls))+')'
+            print("Successfully appended", self._chords_site_list[-1].get_title(), count)
 
     def sort(self):
         self._chords_site_list.sort(key=lambda site: (site.get_title()))
@@ -55,7 +56,7 @@ class ChordsSiteList:
         return self._file_name
 
 def test():
-    urls_file_path = 'URLs/UG-URLs.txt'
+    urls_file_path = 'URLs/UG-test.txt'
     chords_site_list = ChordsSiteList(urls_file_path)
     print (chords_site_list._chords_site_list[0]._song_name)
     chords_site_list.sort()

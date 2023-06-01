@@ -83,7 +83,7 @@ class EReaderPDFWriter (PDFChordWriter):
 def test():
     from PDFConfig import PDFConfig
     cfg = PDFConfig()
-    urls_file_path = 'URLs/UG-URLs.txt'
+    urls_file_path = 'URLs/UG-test.txt'
     tablet_chord_writer = EReaderPDFWriter(urls_file_path, cfg)
     pdf_file_path = 'output.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
