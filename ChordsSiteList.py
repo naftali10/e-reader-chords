@@ -4,11 +4,13 @@ from TAB4UChordsSite import TAB4UChordsSite
 
 class ChordsSiteList:
 
+    _file_name = None
     _site_name = None
     _urls_file_path = None
     _chords_site_list = None
 
     def __init__(self, urls_file_path, max_line_len, site_name):
+        self._file_name = urls_file_path.split('/')[-1].split('.')[0]
         self._site_name = site_name
         self._urls_file_path = urls_file_path
         self.parse_urls(max_line_len)
@@ -48,6 +50,9 @@ class ChordsSiteList:
         for chords_site in self._chords_site_list:
             setlist.append(chords_site.get_title())
         return setlist
+
+    def get_file_name(self):
+        return self._file_name
 
 def test():
     urls_file_path = 'URLs/UG-URLs.txt'
