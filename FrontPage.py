@@ -16,6 +16,7 @@ class FrontPage (canvas.Canvas):
         super().__init__(self._packet, pagesize=(self._cfg.page_width_cm, self._cfg.page_height_px))
         self._setlist = chord_site_list.get_setlist()
         self._file_name = chord_site_list.get_file_name()
+        self._language = chord_site_list.get_language()
         self.generate_page()
 
     def generate_page(self):
@@ -28,9 +29,14 @@ class FrontPage (canvas.Canvas):
         def write_setlist():
             x = self._cfg.left_margin_px
             y = self._cfg.page_height_px - self._cfg.top_margin_px - self._leading * 2
-            for title in self._setlist:
-                self.drawString(x, y, title)
-                y -= self._leading
+            if self._language == 'EN':
+                for title in self._setlist:
+                    self.drawString(x, y, title)
+                    y -= self._leading
+            if self._language == 'HE':
+                for title in self._setlist:
+                    self.drawRightString(self._cfg.page_width_px-x, y, title[::-1])
+                    y -= self._leading
 
         def write_file_title():
             x_for_center = max(0, (self._cfg.page_width_px - len(self._file_name) * self._cfg.char_to_px) / 2)

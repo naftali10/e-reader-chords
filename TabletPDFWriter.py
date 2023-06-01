@@ -63,8 +63,8 @@ class TabletPDFWriter (PDFChordWriter):
 
 
 def test():
-    UG_urls_file_path = 'URLs/UG-URLs.txt'
-    tablet_chord_writer = TabletPDFWriter(UG_urls_file_path, 'UG')
+    UG_urls_file_path = 'URLs/TAB4U-URLs.txt'
+    tablet_chord_writer = TabletPDFWriter(UG_urls_file_path, 'TAB4U')
     pdf_file_path = 'Output/'+UG_urls_file_path.split('/')[-1].split('.')[0]+'.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
 
