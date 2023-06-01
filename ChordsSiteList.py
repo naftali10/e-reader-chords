@@ -43,6 +43,12 @@ class ChordsSiteList:
         if self._site_name == 'TAB4U':
             return 'HE'
 
+    def get_setlist(self):
+        setlist = []
+        for chords_site in self._chords_site_list:
+            setlist.append(chords_site.get_title())
+        return setlist
+
 def test():
     urls_file_path = 'URLs/UG-URLs.txt'
     chords_site_list = ChordsSiteList(urls_file_path)

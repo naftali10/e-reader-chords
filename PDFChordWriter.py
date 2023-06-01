@@ -3,6 +3,7 @@ from io import BytesIO
 from pdfrw import PdfWriter, PdfReader
 
 from ChordsSiteList import *
+from FrontPage import FrontPage
 
 
 class PDFChordWriter(canvas.Canvas):
@@ -10,6 +11,7 @@ class PDFChordWriter(canvas.Canvas):
     _packet = None
     _cfg = None
     _chord_site_list = None
+    _front_page = None
 
     def __init__(self, urls_file_path, site_name):
         self._packet = BytesIO()
@@ -29,11 +31,13 @@ class PDFChordWriter(canvas.Canvas):
         self.save()
         # Move to the beginning of the StringIO buffer
         self._packet.seek(0)
+        self._front_page = FrontPage(self._chord_site_list, self._cfg)
         new_pdf = PdfReader(self._packet)
 
         # Add the new pages to PDF
         pdf_writer = PdfWriter()
-        for page in new_pdf.pages:
+        pdf_writer.addpage(self._front_page.get_page())
+        for page in new_pdf.pages[1:]:
             pdf_writer.addpage(page)
         pdf_writer.write(pdf_path)
 
