@@ -4,11 +4,6 @@ from selenium.webdriver.common.by import By
 
 class UGChordsSite(ChordsSite.ChordsSite):
 
-    def __call__(self, url, max_line_len):
-        print('called')
-        self.__init__(url, max_line_len)
-        return self
-
     def __init__(self, url, max_line_len):
         
         super().__init__(url)
@@ -19,9 +14,7 @@ class UGChordsSite(ChordsSite.ChordsSite):
         self.transpose_chords()
         self.set_song_text()
 
-        print("Quitting", url)
         self._web_aux.browser.quit()
-        print("Started parsing", url)
         self.parse_song(max_line_len)
 
     def set_song_text(self):

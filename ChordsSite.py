@@ -21,20 +21,16 @@ class ChordsSite:
             # Launch a headless Edge browser using Selenium
             options = webdriver.EdgeOptions()
             options.use_chromium = True
-            # options.add_argument('headless')
+            options.add_argument('headless')
             self.browser = webdriver.Edge(options=options)
-            print("Created browser for", url)
 
             self.browser.get(url)
-            print("Got webpage of", url)
 
             # Wait for the page to fully render
-            # self.browser.implicitly_wait(3)
-            # print("Finished waiting for", url)
+            self.browser.implicitly_wait(3)
 
             # Use BeautifulSoup to parse the HTML content of the website
             self.soup = BeautifulSoup(self.browser.page_source, "html.parser")
-            print("Made soup of", url)
 
         def reload(self):
             self.browser.refresh()

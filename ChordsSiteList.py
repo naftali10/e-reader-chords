@@ -1,16 +1,17 @@
 from UGChordsSite import UGChordsSite
 from TAB4UChordsSite import TAB4UChordsSite
 import multiprocessing
+from multiprocessing.pool import ThreadPool
 
 
-def populate_site_list(url, site_name, max_line_len, chords_site_list):
+def make_chord_site(url, site_name, max_line_len):
+    chord_site = None
     if site_name == 'UG':
-        abc = UGChordsSite(url, max_line_len)
-        print(abc)
-        print("about to append...")
-        chords_site_list.append(abc._language)
+        chord_site = UGChordsSite(url, max_line_len)
     if site_name == 'TAB4U':
-        chords_site_list.append(TAB4UChordsSite(url, max_line_len))
+        chord_site = TAB4UChordsSite(url, max_line_len)
+    print(url, "has been processed successfully")
+    return chord_site
 
 
 class ChordsSiteList:
@@ -31,18 +32,13 @@ class ChordsSiteList:
 
     def parse_urls(self):
 
-        def load_pages_in_parallel():
-            chunk_size = 1
-            url_list_chunks = [urls[i:i+chunk_size] for i in range(0, len(urls), chunk_size)]
-            with multiprocessing.Manager() as manager:
-                shared_list = manager.list()
-                for url_batch in url_list_chunks:
-                    parallel_execution = multiprocessing.Pool()
-                    args = [(url, self._site_name, self._max_line_len, shared_list) for url in url_batch]
-                    parallel_execution.starmap(populate_site_list, args)
-                    parallel_execution.close()
-                    parallel_execution.join()
-                    print(shared_list)
+        def load_pages_parallely():
+            with ThreadPool(4) as pool:
+                args = [(url, self._site_name, self._max_line_len) for url in urls]
+                for chord_site in pool.starmap(make_chord_site, args):
+                    self._chords_site_list.append(chord_site)
+            pool.close()
+            pool.join()
 
         # Read the list of URLs from an external file
         with open(self._urls_file_path) as f:
@@ -52,7 +48,7 @@ class ChordsSiteList:
 
         # Iterate over the list of URLs
         self._chords_site_list = []
-        load_pages_in_parallel()
+        load_pages_parallely()
 
     def sort(self):
         self._chords_site_list.sort(key=lambda site: (site.get_title()))
