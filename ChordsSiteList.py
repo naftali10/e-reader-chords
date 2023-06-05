@@ -1,7 +1,19 @@
 from UGChordsSite import UGChordsSite
 from TAB4UChordsSite import TAB4UChordsSite
-import multiprocessing
+from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
+from threading import Lock
+
+lock = Lock()
+tasks_total = 0
+tasks_completed = 0
+
+
+def show_progress():
+    global lock, tasks_total, tasks_completed
+    with lock:
+        tasks_completed += 1
+        print(f'{tasks_completed}/{tasks_total} completed, {tasks_total-tasks_completed} remain.')
 
 
 def make_chord_site(url, site_name, max_line_len):
@@ -10,7 +22,7 @@ def make_chord_site(url, site_name, max_line_len):
         chord_site = UGChordsSite(url, max_line_len)
     if site_name == 'TAB4U':
         chord_site = TAB4UChordsSite(url, max_line_len)
-    print(url, "has been processed successfully")
+    show_progress()
     return chord_site
 
 
@@ -33,6 +45,9 @@ class ChordsSiteList:
     def parse_urls(self):
 
         def load_pages_parallely():
+            global tasks_total, tasks_completed
+            tasks_total = len(urls)
+            tasks_completed = 0
             with ThreadPool(4) as pool:
                 args = [(url, self._site_name, self._max_line_len) for url in urls]
                 for chord_site in pool.starmap(make_chord_site, args):
