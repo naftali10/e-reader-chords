@@ -29,5 +29,5 @@ if __name__ == '__main__':
         produce_pdfs(ug_urls_dir, 'UG')
         produce_pdfs(tab4u_urls_dir, 'TAB4U')
     else:
-        produce_pdf('URLs/TAB4U/TAB4U-all.txt', 'TAB4U')
+        produce_pdf('URLs/UG-test.txt', 'UG')
     print('DONE!')
