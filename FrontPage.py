@@ -30,12 +30,14 @@ class FrontPage (canvas.Canvas):
             x = self._cfg.left_margin_px
             y = self._cfg.page_height_px - self._cfg.top_margin_px - self._leading * 2
             if self._language == 'EN':
-                for title in self._setlist:
-                    self.drawString(x, y, title)
+                for num, title in enumerate(self._setlist):
+                    line = str(num) + '.' + ' '*(3-len(str(num))) + title
+                    self.drawString(x, y, line)
                     y -= self._leading
             if self._language == 'HE':
-                for title in self._setlist:
-                    self.drawRightString(self._cfg.page_width_px-x, y, title[::-1])
+                for num, title in enumerate(self._setlist):
+                    line = title[::-1] + ' '*(3-len(str(num))) + '.' + str(num)
+                    self.drawRightString(self._cfg.page_width_px-x, y, line)
                     y -= self._leading
 
         def write_file_title():
