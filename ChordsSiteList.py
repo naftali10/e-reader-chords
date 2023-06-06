@@ -1,5 +1,29 @@
 from UGChordsSite import UGChordsSite
 from TAB4UChordsSite import TAB4UChordsSite
+from tqdm import tqdm
+from multiprocessing.pool import ThreadPool
+from threading import Lock
+
+lock = Lock()
+tasks_total = 0
+tasks_completed = 0
+
+
+def show_progress():
+    global lock, tasks_total, tasks_completed
+    with lock:
+        tasks_completed += 1
+        print(f'{tasks_completed}/{tasks_total} completed, {tasks_total-tasks_completed} remain.')
+
+
+def make_chord_site(url, site_name, max_line_len):
+    chord_site = None
+    if site_name == 'UG':
+        chord_site = UGChordsSite(url, max_line_len)
+    if site_name == 'TAB4U':
+        chord_site = TAB4UChordsSite(url, max_line_len)
+    show_progress()
+    return chord_site
 
 
 class ChordsSiteList:
@@ -8,31 +32,38 @@ class ChordsSiteList:
     _site_name = None
     _urls_file_path = None
     _chords_site_list = None
+    _max_line_len = None
 
     def __init__(self, urls_file_path, max_line_len, site_name):
         self._file_name = urls_file_path.split('/')[-1].split('.')[0]
         self._site_name = site_name
         self._urls_file_path = urls_file_path
-        self.parse_urls(max_line_len)
+        self._max_line_len = max_line_len
+        self.parse_urls()
         self.sort()
 
-    def parse_urls(self, max_line_len):
+    def parse_urls(self):
+
+        def load_pages_parallely():
+            global tasks_total, tasks_completed
+            tasks_total = len(urls)
+            tasks_completed = 0
+            with ThreadPool(1) as pool:
+                args = [(url, self._site_name, self._max_line_len) for url in urls]
+                for chord_site in pool.starmap(make_chord_site, args):
+                    self._chords_site_list.append(chord_site)
+            pool.close()
+            pool.join()
+
         # Read the list of URLs from an external file
         with open(self._urls_file_path) as f:
             urls = f.readlines()
-            
             # Remove whitespace characters like `\n` at the end of each line
             urls = [url.strip() for url in urls]
 
         # Iterate over the list of URLs
         self._chords_site_list = []
-        for idx, url in enumerate(urls):
-            if self._site_name == 'UG':
-                self._chords_site_list.append(UGChordsSite(url, max_line_len))
-            if self._site_name == 'TAB4U':
-                self._chords_site_list.append(TAB4UChordsSite(url, max_line_len))
-            count = '('+str(idx+1)+'/'+str(len(urls))+')'
-            print("Successfully appended", self._chords_site_list[-1].get_title(), count)
+        load_pages_parallely()
 
     def sort(self):
         self._chords_site_list.sort(key=lambda site: (site.get_title()))
@@ -55,13 +86,14 @@ class ChordsSiteList:
     def get_file_name(self):
         return self._file_name
 
+
 def test():
     urls_file_path = 'URLs/UG-test.txt'
-    chords_site_list = ChordsSiteList(urls_file_path)
+    chords_site_list = ChordsSiteList(urls_file_path, 150, 'UG')
     print (chords_site_list._chords_site_list[0]._song_name)
     chords_site_list.sort()
     print (chords_site_list._chords_site_list[0]._song_name)
-    chords_site_list.save_to_pdf("output.pdf")
 
 
-# test()
+if __name__ == '__main__':
+    test()

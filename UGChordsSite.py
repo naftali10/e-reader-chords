@@ -3,12 +3,12 @@ from selenium.webdriver.common.by import By
 
 
 class UGChordsSite(ChordsSite.ChordsSite):
-    
+
     def __init__(self, url, max_line_len):
         
         super().__init__(url)
 
-        _language = "EN"
+        self._language = "EN"
         self.set_artist()
         self.set_song_name()
         self.transpose_chords()
