@@ -18,16 +18,12 @@ class ChordsSite:
         soup = None
         
         def __init__(self, url):
-            # Launch a headless Edge browser using Selenium
-            options = webdriver.EdgeOptions()
-            options.use_chromium = True
-            options.add_argument('headless')
-            self.browser = webdriver.Edge(options=options)
+            options = webdriver.ChromeOptions()
+            options.add_argument(r"--user-data-dir=C:\Users\nafta\AppData\Local\Google\Chrome\User Data")
+            options.add_argument(r'--profile-directory=Default')
+            self.browser = webdriver.Chrome(options=options)
 
             self.browser.get(url)
-
-            # Wait for the page to fully render
-            self.browser.implicitly_wait(3)
 
             # Use BeautifulSoup to parse the HTML content of the website
             self.soup = BeautifulSoup(self.browser.page_source, "html.parser")

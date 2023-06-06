@@ -48,7 +48,7 @@ class ChordsSiteList:
             global tasks_total, tasks_completed
             tasks_total = len(urls)
             tasks_completed = 0
-            with ThreadPool(4) as pool:
+            with ThreadPool(1) as pool:
                 args = [(url, self._site_name, self._max_line_len) for url in urls]
                 for chord_site in pool.starmap(make_chord_site, args):
                     self._chords_site_list.append(chord_site)
