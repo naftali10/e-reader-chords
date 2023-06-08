@@ -1,5 +1,6 @@
 from TabletPDFWriter import TabletPDFWriter
 import os
+import sys
 
 
 def produce_pdf(filepath, domain):
@@ -20,13 +21,10 @@ def produce_pdfs(urls_dir, domain):
 
 
 if __name__ == '__main__':
-    is_multiple_files = False
-    if is_multiple_files:
-        ug_urls_dir = './URLs/UG'
-        tab4u_urls_dir = './URLs/TAB4U'
-
-        produce_pdfs(ug_urls_dir, 'UG')
-        produce_pdfs(tab4u_urls_dir, 'TAB4U')
-    else:
-        produce_pdf('URLs/UG/UG-all.txt', 'UG')
-    print('DONE!')
+    path = sys.argv[1]
+    domain = sys.argv[2]
+    if os.path.isdir(path):
+        produce_pdfs(path, domain)
+    elif os.path.isfile(path):
+        produce_pdf(path, domain)
+    print('DONE!\nExiting...')
