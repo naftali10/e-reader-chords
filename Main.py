@@ -19,7 +19,6 @@ def produce_pdfs(urls_dir, domain):
         produce_pdf(filepath, domain)
 
 
-
 if __name__ == '__main__':
     is_multiple_files = False
     if is_multiple_files:
@@ -29,5 +28,5 @@ if __name__ == '__main__':
         produce_pdfs(ug_urls_dir, 'UG')
         produce_pdfs(tab4u_urls_dir, 'TAB4U')
     else:
-        produce_pdf('URLs/UG-test.txt', 'UG')
+        produce_pdf('URLs/UG/UG-all.txt', 'UG')
     print('DONE!')

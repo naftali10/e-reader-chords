@@ -1,29 +1,4 @@
-from UGChordsSite import UGChordsSite
-from TAB4UChordsSite import TAB4UChordsSite
-from tqdm import tqdm
-from multiprocessing.pool import ThreadPool
-from threading import Lock
-
-lock = Lock()
-tasks_total = 0
-tasks_completed = 0
-
-
-def show_progress():
-    global lock, tasks_total, tasks_completed
-    with lock:
-        tasks_completed += 1
-        print(f'{tasks_completed}/{tasks_total} completed, {tasks_total-tasks_completed} remain.')
-
-
-def make_chord_site(url, site_name, max_line_len):
-    chord_site = None
-    if site_name == 'UG':
-        chord_site = UGChordsSite(url, max_line_len)
-    if site_name == 'TAB4U':
-        chord_site = TAB4UChordsSite(url, max_line_len)
-    show_progress()
-    return chord_site
+from WebManager import WebManager
 
 
 class ChordsSiteList:
@@ -31,10 +6,11 @@ class ChordsSiteList:
     _file_name = None
     _site_name = None
     _urls_file_path = None
-    _chords_site_list = None
+    _chords_site_list = []
     _max_line_len = None
 
     def __init__(self, urls_file_path, max_line_len, site_name):
+        self._web_manager = WebManager(site_name, max_line_len, self._chords_site_list)
         self._file_name = urls_file_path.split('/')[-1].split('.')[0]
         self._site_name = site_name
         self._urls_file_path = urls_file_path
@@ -43,27 +19,12 @@ class ChordsSiteList:
         self.sort()
 
     def parse_urls(self):
-
-        def load_pages_parallely():
-            global tasks_total, tasks_completed
-            tasks_total = len(urls)
-            tasks_completed = 0
-            with ThreadPool(1) as pool:
-                args = [(url, self._site_name, self._max_line_len) for url in urls]
-                for chord_site in pool.starmap(make_chord_site, args):
-                    self._chords_site_list.append(chord_site)
-            pool.close()
-            pool.join()
-
-        # Read the list of URLs from an external file
         with open(self._urls_file_path) as f:
             urls = f.readlines()
             # Remove whitespace characters like `\n` at the end of each line
             urls = [url.strip() for url in urls]
-
-        # Iterate over the list of URLs
         self._chords_site_list = []
-        load_pages_parallely()
+        self._web_manager.load_pages_parallely(urls)
 
     def sort(self):
         self._chords_site_list.sort(key=lambda site: (site.get_title()))

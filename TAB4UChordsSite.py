@@ -3,15 +3,14 @@ import ChordsSite
 
 class TAB4UChordsSite(ChordsSite.ChordsSite):
     
-    def __init__(self, url, max_line_len):
+    def __init__(self, url, max_line_len, browser):
         
-        super().__init__(url)
+        super().__init__(url, browser)
 
-        _language = "HE"
+        self._language = "HE"
         self.set_name_and_artist()
         self.set_song_text()
 
-        self._web_aux.browser.quit()
         self.parse_song(max_line_len)
 
     def set_song_text(self):
