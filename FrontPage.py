@@ -31,12 +31,12 @@ class FrontPage (canvas.Canvas):
             y = self._cfg.page_height_px - self._cfg.top_margin_px - self._leading * 2
             if self._language == 'EN':
                 for num, title in enumerate(self._setlist):
-                    line = str(num) + '.' + ' '*(3-len(str(num))) + title
+                    line = str(num+1) + '.' + ' '*(3-len(str(num))) + title
                     self.drawString(x, y, line)
                     y -= self._leading
             if self._language == 'HE':
                 for num, title in enumerate(self._setlist):
-                    line = title[::-1] + ' '*(3-len(str(num))) + '.' + str(num)
+                    line = title[::-1] + ' '*(3-len(str(num))) + '.' + str(num+1)
                     self.drawRightString(self._cfg.page_width_px-x, y, line)
                     y -= self._leading
 
