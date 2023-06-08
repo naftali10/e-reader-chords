@@ -11,7 +11,7 @@ browsers = {}
 
 
 class WebManager:
-    _thread_num = 1
+    _thread_num = 2
 
     def __init__(self, site_name, max_line_len):
         self._site_name = site_name
@@ -55,6 +55,7 @@ class WebManager:
     def make_chord_site(url, site_name, max_line_len):
         chord_site = None
         browser = WebManager.acquire_browser()
+        browser.implicitly_wait(3)
         if site_name == 'UG':
             chord_site = UGChordsSite(url, max_line_len, browser)
         if site_name == 'TAB4U':

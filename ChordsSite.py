@@ -30,3 +30,6 @@ class ChordsSite:
 
     def get_browser(self):
         return self._web_aux.get_browser()
+
+    def get_soup(self):
+        return self._web_aux.get_soup()

@@ -19,3 +19,6 @@ class WebAux:
 
     def get_browser(self):
         return self.browser
+
+    def get_soup(self):
+        return self.soup
