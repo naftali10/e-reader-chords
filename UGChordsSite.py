@@ -4,9 +4,9 @@ from selenium.webdriver.common.by import By
 
 class UGChordsSite(ChordsSite.ChordsSite):
 
-    def __init__(self, url, max_line_len):
+    def __init__(self, url, max_line_len, browser):
         
-        super().__init__(url)
+        super().__init__(url, browser)
 
         self._language = "EN"
         self.set_artist()
@@ -14,7 +14,6 @@ class UGChordsSite(ChordsSite.ChordsSite):
         self.transpose_chords()
         self.set_song_text()
 
-        self._web_aux.browser.quit()
         self.parse_song(max_line_len)
 
     def set_song_text(self):
@@ -41,10 +40,10 @@ class UGChordsSite(ChordsSite.ChordsSite):
         self._song_name = section.get_text()[:-7]
 
     def transpose_chords(self):
-        down_button = self._web_aux.browser.find_elements(
+        down_button = self.get_browser().find_elements(
             By.CLASS_NAME,
             value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[2]
-        up_button = self._web_aux.browser.find_elements(
+        up_button = self.get_browser().find_elements(
             By.CLASS_NAME,
             value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[3]
         if self._chord_transpose < 0:

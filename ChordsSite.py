@@ -1,6 +1,5 @@
-from selenium import webdriver
-from bs4 import BeautifulSoup
 from SongLineList import SongLineList
+from WebAux import WebAux
 
 
 class ChordsSite:
@@ -13,31 +12,12 @@ class ChordsSite:
     _parsed_lines = None
     _chord_transpose = 0
     
-    class WebAux:
-        browser = None
-        soup = None
-        
-        def __init__(self, url):
-            options = webdriver.ChromeOptions()
-            options.add_argument(r"--user-data-dir=C:\Users\nafta\AppData\Local\Google\Chrome\User Data")
-            options.add_argument(r'--profile-directory=Default')
-            self.browser = webdriver.Chrome(options=options)
-
-            self.browser.get(url)
-
-            # Use BeautifulSoup to parse the HTML content of the website
-            self.soup = BeautifulSoup(self.browser.page_source, "html.parser")
-
-        def reload(self):
-            self.browser.refresh()
-            self.soup = BeautifulSoup(self.browser.page_source, "html.parser")
-    
-    def __init__(self, url):
+    def __init__(self, url, browser):
         url_breakup = url.split('|')
         if 1 < len(url_breakup):
             self._chord_transpose = int(url_breakup[-1])
         self._url = url_breakup[0]
-        self._web_aux = ChordsSite.WebAux(self._url)
+        self._web_aux = WebAux(self._url, browser)
 
     def parse_song(self, max_line_len):
         self._parsed_lines = SongLineList(self._song_text, max_line_len)
@@ -47,3 +27,6 @@ class ChordsSite:
 
     def get_parsed_lines(self):
         return self._parsed_lines
+
+    def get_browser(self):
+        return self._web_aux.get_browser()
