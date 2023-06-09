@@ -7,7 +7,7 @@ def produce_pdf(filepath, domain):
     print("Started processing", filepath)
     tablet_chord_writer = TabletPDFWriter(filepath, domain)
     file_name = os.path.splitext(os.path.basename(filepath))[0]
-    pdf_file_path = 'output/' + file_name + '.pdf'
+    pdf_file_path = 'output_pdfs/' + file_name + '.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
     print("Saved PDF", pdf_file_path)
 
