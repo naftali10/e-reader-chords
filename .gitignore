@@ -3,8 +3,8 @@ __pycache__/
 titles/
 venv/
 .idea/
-URLs/
-Output/
+url_lists/
+output/
 output.pdf
-URLs/UG-test.txt
-URLs/TAB4U-test.txt
+url_lists/UG-test.txt
+url_lists/TAB4U-test.txt
