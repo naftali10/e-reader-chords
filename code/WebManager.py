@@ -35,15 +35,12 @@ class WebManager:
     def make_browsers(self):
         global browsers
         browsers = {}
-        options = webdriver.ChromeOptions()
-        options.add_argument(r"--user-data-dir=C:\Users\nafta\AppData\Local\Google\Chrome\User Data")
-        options.add_argument(r'--profile-directory=Default')
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-setuid-sandbox")
-        options.add_argument("--remote-debugging-port=9222")
+        options = webdriver.EdgeOptions()
+        extension_dir_that_i_zipped = r"C:\Users\nafta\AppData\Local\Microsoft\Edge\User Data\\" + \
+                                      r"Profile 1\Extensions\uBlock.zip"
+        options.add_extension(extension_dir_that_i_zipped)
         for i in range(self._thread_num):
-            browsers[webdriver.Chrome(options=options)] = 'free'
+            browsers[webdriver.Edge(options=options)] = 'free'
 
     @staticmethod
     def quit_browsers():
