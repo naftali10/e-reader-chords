@@ -11,7 +11,7 @@ browsers = {}
 
 
 class WebManager:
-    _thread_num = 4
+    _thread_num = 3
 
     def __init__(self, site_name, max_line_len):
         self._site_name = site_name
