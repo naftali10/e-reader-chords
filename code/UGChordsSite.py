@@ -40,12 +40,28 @@ class UGChordsSite(ChordsSite.ChordsSite):
         self._song_name = section.get_text()[:-7]
 
     def transpose_chords(self):
+
+        def reset_transpose():
+            existing_transpose_element = self.get_browser().find_elements(
+                By.CLASS_NAME,
+                value='KPV6o')
+            if existing_transpose_element:
+                existing_transpose = int(existing_transpose_element[0].text())
+                if existing_transpose < 0:
+                    for j in range(abs(existing_transpose)):
+                        up_button.click()
+                else:
+                    for j in range(abs(existing_transpose)):
+                        down_button.click()
+                self._web_aux.reload()
+
         down_button = self.get_browser().find_elements(
             By.CLASS_NAME,
             value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[2]
         up_button = self.get_browser().find_elements(
             By.CLASS_NAME,
             value='ovH1k.rPQkl.mcpNL.IxFbd.gm3Af.lTEpj.mLpXg')[3]
+        reset_transpose()
         if self._chord_transpose < 0:
             for i in range(abs(self._chord_transpose)):
                 down_button.click()
