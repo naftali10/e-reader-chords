@@ -1,5 +1,5 @@
-from selenium import webdriver
 from bs4 import BeautifulSoup
+import time
 
 
 class WebAux:
@@ -15,6 +15,7 @@ class WebAux:
 
     def reload(self):
         self.browser.refresh()
+        time.sleep(5)
         self.soup = BeautifulSoup(self.browser.page_source, "html.parser")
 
     def get_browser(self):
