@@ -1,11 +1,11 @@
-from PDFWriterForTablet import PDFWriterForTablet
+from PDFMakerForTablet import PDFMakerForTablet
 import os
 import sys
 
 
 def produce_pdf(filepath, domain):
     print("Started processing", filepath)
-    pdf_writer = PDFWriterForTablet(filepath, domain)
+    pdf_writer = PDFMakerForTablet(filepath, domain)
     file_name = os.path.splitext(os.path.basename(filepath))[0]
     pdf_file_path = '../output_pdfs/' + file_name + '.pdf'
     pdf_writer.make_pdf(pdf_file_path)

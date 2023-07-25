@@ -1,4 +1,4 @@
-from WebManager import WebManager
+from BrowsingManager import BrowsingManager
 
 
 class Songbook:
@@ -10,7 +10,7 @@ class Songbook:
     _max_line_len = None
 
     def __init__(self, urls_file_path, max_line_len, domain):
-        self._web_manager = WebManager(domain, max_line_len)
+        self._web_manager = BrowsingManager(domain, max_line_len)
         self._file_name = urls_file_path.split('/')[-1].split('.')[0]
         self._domain = domain
         self._urls_file_path = urls_file_path

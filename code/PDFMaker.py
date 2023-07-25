@@ -6,7 +6,7 @@ from Songbook import *
 from FrontPage import FrontPage
 
 
-class PDFWriter(canvas.Canvas):
+class PDFMaker(canvas.Canvas):
 
     _packet = None
     _cfg = None
@@ -49,7 +49,7 @@ def test():
     from PDFConfig import PDFConfig
     cfg = PDFConfig()
     urls_file_path = '../input_urls/UG-test.txt'
-    pdf_chord_writer = PDFWriter(urls_file_path, cfg)
+    pdf_chord_writer = PDFMaker(urls_file_path, cfg)
     pdf_file_path = 'output_pdfs.pdf'
     pdf_chord_writer.finalize_pdf(pdf_file_path)
 

@@ -1,9 +1,9 @@
-from PDFWriter import PDFWriter
+from PDFMaker import PDFMaker
 from PDFConfig import PDFConfig
 import re
 
 
-class PDFWriterForTablet (PDFWriter):
+class PDFMakerForTablet (PDFMaker):
 
     _cfg = None
 
@@ -64,7 +64,7 @@ class PDFWriterForTablet (PDFWriter):
 
 def test():
     UG_urls_file_path = '../input_urls/TAB4U-test.txt'
-    tablet_chord_writer = PDFWriterForTablet(UG_urls_file_path, 'TAB4U')
+    tablet_chord_writer = PDFMakerForTablet(UG_urls_file_path, 'TAB4U')
     pdf_file_path = 'output_pdfs/'+UG_urls_file_path.split('/')[-1].split('.')[0]+'.pdf'
     tablet_chord_writer.make_pdf(pdf_file_path)
 

@@ -10,7 +10,7 @@ tasks_completed = 0
 browsers = {}
 
 
-class WebManager:
+class BrowsingManager:
     _thread_num = 3
 
     def __init__(self, domain, max_line_len):
@@ -25,7 +25,7 @@ class WebManager:
         tasks_completed = 0
         with ThreadPool(self._thread_num) as pool:
             args = [(url, self._domain, self._max_line_len) for url in urls]
-            for webpage in pool.starmap(WebManager.make_webpage, args):
+            for webpage in pool.starmap(BrowsingManager.make_webpage, args):
                 webpages.append(webpage)
         pool.close()
         pool.join()
@@ -51,14 +51,14 @@ class WebManager:
     @staticmethod
     def make_webpage(url, domain, max_line_len):
         webpage = None
-        browser = WebManager.acquire_browser()
+        browser = BrowsingManager.acquire_browser()
         browser.implicitly_wait(3)
         if domain == 'UG':
             webpage = UGWebPage(url, max_line_len, browser)
         if domain == 'TAB4U':
             webpage = TAB4UWebPage(url, max_line_len, browser)
-        WebManager.release_browser(browser)
-        WebManager.show_progress()
+        BrowsingManager.release_browser(browser)
+        BrowsingManager.show_progress()
         return webpage
 
     @staticmethod
