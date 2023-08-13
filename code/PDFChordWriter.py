@@ -48,7 +48,7 @@ class PDFChordWriter(canvas.Canvas):
 def test():
     from PDFConfig import PDFConfig
     cfg = PDFConfig()
-    urls_file_path = '../input_url_lists/UG-test.txt'
+    urls_file_path = '../input_urls/UG-test.txt'
     pdf_chord_writer = PDFChordWriter(urls_file_path, cfg)
     pdf_file_path = 'output_pdfs.pdf'
     pdf_chord_writer.finalize_pdf(pdf_file_path)

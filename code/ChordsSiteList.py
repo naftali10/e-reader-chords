@@ -49,7 +49,7 @@ class ChordsSiteList:
 
 
 def test():
-    urls_file_path = '../input_url_lists/UG-test.txt'
+    urls_file_path = '../input_urls/UG-test.txt'
     chords_site_list = ChordsSiteList(urls_file_path, 150, 'UG')
     print (chords_site_list._chords_site_list[0]._song_name)
     chords_site_list.sort()
