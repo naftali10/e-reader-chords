@@ -20,6 +20,6 @@ Initially, I considered using an e-reader,
 but later realized that a tablet screen would be even more convenient due to its responsiveness.
 
 # Project structure
-URLs ➜ **Browse** ➜ Webpages ➜ **Parse** ➜ Songbook ➜ **Format** ➜ PDF
+URLs ➜ **Browse** ➜ Webpages ➜ **Parse** ➜ Songbook ➜ **Publish** ➜ PDF
 
 ![Structure.png](docs%2FStructure.png)

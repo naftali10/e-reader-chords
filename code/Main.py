@@ -31,12 +31,12 @@ def check_domain(urls_domain):
 
 
 if __name__ == '__main__':
-    path = sys.argv[1]
-    domain = sys.argv[2]
-    check_path(path)
-    check_domain(domain)
-    if os.path.isdir(path):
-        produce_pdfs(path, domain)
-    elif os.path.isfile(path):
-        produce_pdf(path, domain)
+    dir_or_file_path = sys.argv[1]
+    web_domain = sys.argv[2]
+    check_path(dir_or_file_path)
+    check_domain(web_domain)
+    if os.path.isdir(dir_or_file_path):
+        produce_pdfs(dir_or_file_path, web_domain)
+    elif os.path.isfile(dir_or_file_path):
+        produce_pdf(dir_or_file_path, web_domain)
     print('DONE!\nExiting...')
