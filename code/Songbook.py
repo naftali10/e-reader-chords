@@ -1,7 +1,10 @@
 from BrowsingManager import BrowsingManager
+from Song import Song
 
 
 class Songbook:
+
+    _songs: [Song]
 
     _file_name = None  # FIXME: songbook should not hold the destination file name. That is the PDF writer's job
     _domain = None
@@ -9,7 +12,18 @@ class Songbook:
     _webpages = []
     _max_line_len = None
 
-    def __init__(self, urls_file_path, max_line_len, domain):
+    def __init__(self):
+        self._songs = []
+
+    def __len__(self) -> int:
+        return len(self._songs)
+
+    def add_song(self, artist, title, text) -> None:
+        # new_song = Song(artist, title, text)
+        # self._songs.append(new_song)
+        pass
+
+    def old__init__(self, urls_file_path, max_line_len, domain):
         self._web_manager = BrowsingManager(domain, max_line_len)
         self._file_name = urls_file_path.split('/')[-1].split('.')[0]
         self._domain = domain
