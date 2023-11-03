@@ -1,6 +1,5 @@
 import unittest
-from Orchestrator import Orchestrator
-import WebPage
+from old.Orchestrator import Orchestrator
 
 
 class TestOrchestrator(unittest.TestCase):

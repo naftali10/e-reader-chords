@@ -63,7 +63,7 @@ class Songbook:
 
 
 def test():
-    urls_file_path = '../input_urls/UG-test.txt'
+    urls_file_path = '../../input_urls/UG-test.txt'
     songbook = Songbook(urls_file_path, 150, 'UG')
     print (songbook._webpages[0]._song_name)
     songbook.sort()
