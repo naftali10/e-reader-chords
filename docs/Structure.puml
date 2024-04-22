@@ -15,7 +15,7 @@ Orchestrator *-- PDFMaker
 Orchestrator *-- OutputFileWriter
 
 class InputFileReader {
-    CSV2DataFrame()
+    csv2dataframe()
 }
 
 class DataFrame {
