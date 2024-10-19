@@ -1,4 +1,4 @@
-@startuml
+@startuml flow
 skinparam backgroundColor transparent
 skinparam sequence {
     ArrowColor grey
